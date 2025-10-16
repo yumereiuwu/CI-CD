@@ -13,11 +13,12 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ['3.10', '3.11', '3.12']
+
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
@@ -33,13 +34,11 @@ jobs:
         run: |
           pytest -q || pytest -vv
 
-      - name: Upload reports artifact
+      - name: Upload reports artifact (theo từng version)
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: reports
+          name: reports-${{ matrix.python-version }}
           path: |
             reports/**
             report.html
-
-
